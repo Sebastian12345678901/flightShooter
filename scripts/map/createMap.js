@@ -9,27 +9,71 @@ let createMap = {
       Math.ceil(Math.random() * screenHeight)
     ];
   },
-  createTrees: scene => {
-    let randomNumber = createMap.randomAmount(10);
+
+  createTrees: () => {
+    let randomNumber = createMap.randomAmount(50);
     let trees = [];
     let xY;
     for (i = 0; i < randomNumber; i++) {
       xY = createMap.randomPositions();
-      trees.push(scene.physics.add.sprite(xY[0], xY[1], "tree"));
+
+      trees.push(
+        game.scene.scenes[0].physics.add.sprite(
+          xY[0],
+          xY[1] - screenHeight,
+          "tree"
+        )
+      );
+      trees[i].depth = 5;
     }
 
     return trees;
   },
 
-  createHills: scene => {
-    let randomNumber = createMap.randomAmount(5);
+  createHills: () => {
+    let randomNumber = createMap.randomAmount(50);
     let hills = [];
     let xY;
     for (i = 0; i < randomNumber; i++) {
       xY = createMap.randomPositions();
-      hills.push(scene.physics.add.sprite(xY[0], xY[1], "hill"));
+      hills.push(
+        game.scene.scenes[0].physics.add.sprite(
+          xY[0],
+          xY[1] - screenHeight,
+          "hill"
+        )
+      );
+      hills[i].depth = 4;
     }
 
     return hills;
+  },
+
+  createStones: () => {
+    let randomNumber = createMap.randomAmount(3);
+    let stones = [];
+    let xY;
+    for (i = 0; i < randomNumber; i++) {
+      xY = createMap.randomPositions();
+      stones.push(
+        game.scene.scenes[0].physics.add.sprite(
+          xY[0],
+          xY[1] - screenHeight,
+          "stone"
+        )
+      );
+      stones[i].depth = 3;
+    }
+
+    return stones;
+  },
+  greenGrass() {
+    let ground = game.scene.scenes[0].physics.add.sprite(
+      screenWidth / 2,
+      screenHeight / 2,
+      "ground-grass"
+    );
+    ground.displayHeight = screenHeight;
+    ground.displayWidth = screenWidth;
   }
 };

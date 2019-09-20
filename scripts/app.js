@@ -20,10 +20,17 @@ var config = {
 
 let game = new Phaser.Game(config);
 
+let planes = [];
+let enemyProjectiles = [];
+let hitAnimationArray = [];
 let cursors;
-let player;
-let enemy;
 let ground;
+let trees;
+let stones;
+let hills;
+let player;
+let playerProjectiles = [];
+
 //laddar in alla assests, som bilder ljud osv...
 function preload() {
   this.load.image("ground-grass", "/images/map/ground-grass.svg");
@@ -32,52 +39,51 @@ function preload() {
   this.load.image("stone", "/images/map/stones.svg");
   this.load.image("house", "/images/map/hus.svg");
   this.load.image("player", "/images/player/player.svg");
+  this.load.image("player-projectile", "/images/player/playerProjectile.svg");
   this.load.image("enemy", "/images/enemys/enemy.svg");
+  this.load.image("enemy-projectile", "/images/enemys/enemyProjectile.svg");
+  this.load.spritesheet("hit-animation", "/images/enemys/hit.png", {
+    frameWidth: 125,
+    frameHeight: 125
+  });
 }
 
-//create är typ som draw tror jag men kanske att update är det och denna ger mer
-//generella saker som bakgrunden ifall den alltid ser likadan ut...
 function create() {
-  console.log(this);
-  let ground = this.physics.add.sprite(
-    screenWidth / 2,
-    screenHeight / 2,
-    "ground-grass"
-  );
+  createMap.greenGrass();
 
-  let trees = createMap.createTrees(this);
-  let hills = createMap.createHills(this);
+  planes.push(new GreenPlane("enemy"));
 
-  ground.displayHeight = screenHeight;
-  ground.displayWidth = screenWidth;
+  hills = createMap.createHills(this);
+  stones = createMap.createStones(this);
+  trees = createMap.createTrees(this);
 
-  player = this.physics.add.sprite(
-    screenWidth / 2,
-    screenHeight - 100,
-    "player"
-  );
+  player = new Player("player", screenWidth / 2, screenHeight - 100);
 
-  player.displayWidth = 400;
-  player.displayHeight = 300;
+  this.physics.add.collider(player, planes);
+  this.physics.add.collider(planes, planes);
 
-  enemy = this.physics.add.sprite(screenWidth / 2, 100, "enemy");
   cursors = this.input.keyboard.createCursorKeys();
 }
 
 function update() {
-  if (cursors.left.isDown) {
-    player.setVelocityX(-250);
-  } else if (cursors.right.isDown) {
-    player.setVelocityX(250);
-  } else {
-    player.setVelocityX(0);
-  }
+  greenPlaneAi.controlls(planes);
 
-  if (cursors.up.isDown) {
-    player.setVelocityY(-250);
-  } else if (cursors.down.isDown) {
-    player.setVelocityY(250);
-  } else {
-    player.setVelocityY(0);
+  playerControlls.controlls();
+  greenPlaneAi.shoot(planes);
+  greenPlaneAi.bulletCollision();
+
+  if (stones.length < 2) {
+    stones = createMap.createStones(this);
   }
+  moveGround.moveGround(stones);
+
+  if (hills.length < 2) {
+    hills = createMap.createHills(this);
+  }
+  moveGround.moveGround(hills);
+
+  if (trees.length < 2) {
+    trees = createMap.createTrees(this);
+  }
+  moveGround.moveGround(trees);
 }
