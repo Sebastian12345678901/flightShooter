@@ -5,10 +5,15 @@ class GreenPlane {
     this.y = this.randomY();
     this.image = image;
     this.hp = 10;
-    this.unit = game.scene.scenes[0].physics.add.sprite(this.x, this.y, image);
-    this.unit.setCircle(25, 125, true);
-    this.unit.displayWidth *= 1.5;
-    this.unit.displayHeight *= 1.5;
+    this.unit = game.scene.scenes[0].physics.add.sprite(
+      this.x,
+      this.y,
+      image,
+      2
+    );
+    this.unit.setCircle(50, 550, 0);
+    this.unit.displayWidth /= 3.5;
+    this.unit.displayHeight /= 3.5;
     this.unit.depth = 9;
   }
   randomX() {

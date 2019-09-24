@@ -31,7 +31,7 @@ let createMap = {
   },
 
   createHills: () => {
-    let randomNumber = createMap.randomAmount(50);
+    let randomNumber = createMap.randomAmount(20);
     let hills = [];
     let xY;
     for (i = 0; i < randomNumber; i++) {

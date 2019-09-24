@@ -30,7 +30,9 @@ let stones;
 let hills;
 let player;
 let playerProjectiles = [];
-
+let seppelinarePlural = [];
+let playerHitAnimation;
+let hp;
 //laddar in alla assests, som bilder ljud osv...
 function preload() {
   this.load.image("ground-grass", "/images/map/ground-grass.svg");
@@ -42,6 +44,28 @@ function preload() {
   this.load.image("player-projectile", "/images/player/playerProjectile.svg");
   this.load.image("enemy", "/images/enemys/enemy.svg");
   this.load.image("enemy-projectile", "/images/enemys/enemyProjectile.svg");
+  this.load.spritesheet("seppelinare", "/images/enemys/seppelinare.png", {
+    frameWidth: 177,
+    frameHeight: 223
+  });
+
+  this.load.spritesheet(
+    "enemy-animation",
+    "/images/enemys/enemyAnimation.png",
+    {
+      frameWidth: 916,
+      frameHeight: 542
+    }
+  );
+
+  this.load.spritesheet(
+    "playerAnimation",
+    "/images/player/playerAnimation.png",
+    {
+      frameWidth: 248,
+      frameHeight: 103
+    }
+  );
   this.load.spritesheet("hit-animation", "/images/enemys/hit.png", {
     frameWidth: 125,
     frameHeight: 125
@@ -49,41 +73,71 @@ function preload() {
 }
 
 function create() {
+  playerHitAnimation = new GreenPlane("enemy-animation", -100, -1000, 3);
   createMap.greenGrass();
 
-  planes.push(new GreenPlane("enemy"));
+  planes.push(new GreenPlane("enemy-animation"));
+  greenPlaneAi.left();
+  greenPlaneAi.right();
 
   hills = createMap.createHills(this);
   stones = createMap.createStones(this);
   trees = createMap.createTrees(this);
 
-  player = new Player("player", screenWidth / 2, screenHeight - 100);
+  player = new Player(
+    "playerAnimation",
+    screenWidth / 2,
+    screenHeight - 100,
+    3,
+    1,
+    1
+  );
 
-  this.physics.add.collider(player, planes);
-  this.physics.add.collider(planes, planes);
+  let score = scoreBoard.displayScore();
+  hp = scoreBoard.displayHp();
+  console.log(player.hp);
+  playerControlls.still();
+  playerControlls.left();
+  playerControlls.right();
 
   cursors = this.input.keyboard.createCursorKeys();
+  seppelinareAi.spawnSeppelinare();
+
+  setInterval(() => {
+    if (player.destroyed) {
+      scoreBoard.gameOver();
+      return;
+    }
+    if (Math.round(Math.random() * 3) == 2) {
+      greenPlaneAi.shoot(planes);
+      player.bulletCollision();
+    }
+
+    seppelinareAi.getRidOfSeppelinareBelowY();
+    greenPlaneAi.getRidOfPlanesBelowY();
+    greenPlaneAi.controlls(planes);
+    greenPlaneAi.spawnPlanes(Math.round(Math.random() * 0.7));
+    if (stones.length < 2) {
+      stones = createMap.createStones();
+    }
+    moveGround.moveGround(stones);
+
+    if (hills.length < 5) {
+      hills = createMap.createHills();
+    }
+    moveGround.moveGround(hills);
+
+    if (trees.length < 10) {
+      trees = createMap.createTrees();
+    }
+  }, 500);
 }
 
 function update() {
-  greenPlaneAi.controlls(planes);
-
+  if (player.destroyed) {
+    return;
+  }
   playerControlls.controlls();
-  greenPlaneAi.shoot(planes);
-  greenPlaneAi.bulletCollision();
 
-  if (stones.length < 2) {
-    stones = createMap.createStones(this);
-  }
-  moveGround.moveGround(stones);
-
-  if (hills.length < 2) {
-    hills = createMap.createHills(this);
-  }
-  moveGround.moveGround(hills);
-
-  if (trees.length < 2) {
-    trees = createMap.createTrees(this);
-  }
   moveGround.moveGround(trees);
 }

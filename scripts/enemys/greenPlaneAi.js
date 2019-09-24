@@ -1,52 +1,85 @@
 let greenPlaneAi = {
   slowDownDirectionRate: 0,
   slowDownBulletRate: 0,
-  controlls: planes => {
-    greenPlaneAi.slowDownDirectionRate++;
 
-    if (greenPlaneAi.slowDownDirectionRate > 30) {
-      planes.forEach(plane => {
-        let randomBool = Math.ceil(Math.random() * 2);
-
-        if (randomBool == 1) {
-          if (plane.unit.x < player.x) {
-            plane.unit.setVelocityX(150);
-          } else {
-            plane.unit.setVelocityX(-150);
-          }
-        } else {
-          if (plane.unit.x < player.x) {
-            plane.unit.setVelocityX(-100);
-          } else {
-            plane.unit.setVelocityX(100);
-          }
-        }
-        greenPlaneAi.slowDownDirectionRate = 0;
-        plane.unit.setVelocityY(100);
-      });
+  spawnPlanes: amount => {
+    if (amount == 1) {
+      planes.push(new GreenPlane("enemy-animation"));
     }
   },
 
-  shoot: () => {
-    greenPlaneAi.slowDownBulletRate++;
-    if (greenPlaneAi.slowDownBulletRate > 100) {
-      for (let i = 0; i < planes.length; i++) {
-        if (planes[i].unit.y > 0) {
-          enemyProjectiles.push(
-            game.scene.scenes[0].physics.add.sprite(
-              planes[i].unit.x,
-              planes[i].unit.y,
-              "enemy-projectile"
-            )
-          );
+  left: () => {
+    game.scene.scenes[0].anims.create({
+      key: "green-left",
+      frames: game.scene.scenes[0].anims.generateFrameNumbers(
+        "enemy-animation",
+        {
+          start: 1,
+          end: 1
         }
+      ),
+      frameRate: 0,
+      repeat: 0
+    });
+  },
+
+  right: () => {
+    game.scene.scenes[0].anims.create({
+      key: "green-right",
+      frames: game.scene.scenes[0].anims.generateFrameNumbers(
+        "enemy-animation",
+        {
+          start: 3,
+          end: 3
+        }
+      ),
+      frameRate: 0,
+      repeat: 0
+    });
+  },
+
+  controlls: planes => {
+    planes.forEach(plane => {
+      let randomBool = Math.ceil(Math.random() * 2);
+      if (randomBool == 1) {
+        if (plane.unit.x < player.x) {
+          plane.unit.setVelocityX(150);
+          plane.unit.anims.play("green-right");
+        } else {
+          plane.unit.setVelocityX(-150);
+          plane.unit.anims.play("green-left");
+        }
+      } else {
+        if (plane.unit.x < player.x) {
+          plane.unit.setVelocityX(-100);
+          plane.unit.anims.play("green-left");
+        } else {
+          plane.unit.setVelocityX(100);
+          plane.unit.anims.play("green-right");
+        }
+      }
+      greenPlaneAi.slowDownDirectionRate = 0;
+      plane.unit.setVelocityY(100);
+    });
+  },
+
+  shoot: () => {
+    for (let i = 0; i < planes.length; i++) {
+      if (planes[i].unit.y > 0) {
+        enemyProjectiles.push(
+          game.scene.scenes[0].physics.add.sprite(
+            planes[i].unit.x,
+            planes[i].unit.y,
+            "enemy-projectile"
+          )
+        );
       }
 
       enemyProjectiles.forEach(bullet => {
         bullet.setVelocityY(500);
         bullet.depth = 7;
+        bullet.body.setCircle(80, 60, -100);
       });
-      greenPlaneAi.slowDownBulletRate = 0;
     }
   },
 
@@ -74,13 +107,40 @@ let greenPlaneAi = {
               playerProjectiles[j].destroy();
               playerProjectiles.splice(j, 1);
               if (planes[i].hp < 1) {
-                planes[i].hitAnimation(planes[i].x, planes[i].y, true);
+                planes[i].hitAnimation(
+                  planes[i].unit.x,
+                  planes[i].unit.y,
+                  true
+                );
                 planes[i].unit.destroy();
                 planes.splice(i, 1);
-                planes.push(new GreenPlane("enemy"));
-                planes.push(new GreenPlane("enemy"));
-                greenPlaneAi.getRidOfPlanesBelowY();
-                console.log(planes.length);
+
+                score.destroy();
+                scoreBoard.yourScore += 10;
+
+                scoreBoard.displayScore();
+                //collosions for player and planes
+                for (let i = 0; i < planes.length; i++) {
+                  if (planes[i] == undefined) {
+                  } else {
+                    game.scene.scenes[0].physics.add.collider(
+                      planes[i].unit,
+                      player.body
+                    );
+                    // collisons for planes and planes
+                    for (let i = 0; i < planes.length; i++) {
+                      for (let j = 0; j < planes.length; j++) {
+                        if (planes[i] == undefined || planes[j] == undefined) {
+                        } else {
+                          game.scene.scenes[0].physics.add.collider(
+                            planes[i].unit,
+                            planes[j].unit
+                          );
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }
           }
