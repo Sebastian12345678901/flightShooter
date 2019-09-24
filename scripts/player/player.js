@@ -27,6 +27,7 @@ class Player extends Entity {
             scoreBoard.displayHp();
 
             enemyProjectiles[j].destroy();
+            delete enemyProjectiles[i];
             enemyProjectiles.splice(j, 1);
             if (player.hp < 1) {
               playerHitAnimation.hitAnimation(

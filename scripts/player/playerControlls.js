@@ -93,6 +93,7 @@ playerControlls = {
       for (let i = 0; i < playerProjectiles.length; i++) {
         if (playerProjectiles[i].y < 0) {
           playerProjectiles[i].destroy();
+          delete playerProjectiles[i];
           playerProjectiles.splice(i, 1);
         } else {
           playerProjectiles[i].setVelocityY(-750);

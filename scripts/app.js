@@ -73,7 +73,7 @@ function preload() {
 }
 
 function create() {
-  playerHitAnimation = new GreenPlane("enemy-animation", -100, -1000, 3);
+  playerHitAnimation = new GreenPlane("enemy-animation", -100, -2000, 3);
   createMap.greenGrass();
 
   planes.push(new GreenPlane("enemy-animation"));
@@ -135,8 +135,10 @@ function create() {
 
 function update() {
   if (player.destroyed) {
+    player.body.destroy();
     return;
   }
+  seppelinareAi.controlls();
   playerControlls.controlls();
 
   moveGround.moveGround(trees);

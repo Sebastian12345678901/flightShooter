@@ -113,6 +113,7 @@ let greenPlaneAi = {
                   true
                 );
                 planes[i].unit.destroy();
+                delete planes[i];
                 planes.splice(i, 1);
 
                 score.destroy();

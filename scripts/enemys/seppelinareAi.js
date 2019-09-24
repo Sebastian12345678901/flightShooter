@@ -8,6 +8,7 @@ let seppelinareAi = {
     for (let i = 0; i < seppelinarePlural.length; i++) {
       if (seppelinarePlural[i].body.y > screenHeight + 300) {
         seppelinarePlural[i].body.destroy();
+        delete seppelinarePlural[i];
         seppelinarePlural.splice(i, 1);
       }
     }
@@ -34,7 +35,6 @@ let seppelinareAi = {
 
       seppelinareAnimation.body.play(randomKey);
 
-      seppelinareAi.controlls();
       //player sepp collider
       for (let i = 0; i < seppelinarePlural.length; i++) {
         game.scene.scenes[0].physics.add.collider(
