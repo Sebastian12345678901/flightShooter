@@ -64,6 +64,8 @@ let greenPlaneAi = {
   },
 
   shoot: () => {
+    enemyShoot.play();
+
     for (let i = 0; i < planes.length; i++) {
       if (planes[i].unit.y > 0) {
         enemyProjectiles.push(
@@ -101,17 +103,21 @@ let greenPlaneAi = {
           () => {
             if (planes[i] == undefined || playerProjectiles[j] == undefined) {
             } else {
+              bulletImpact.play();
               planes[i].hp--;
               planes[i].hitAnimation(planes[i].unit.x, planes[i].unit.y, false);
 
               playerProjectiles[j].destroy();
               playerProjectiles.splice(j, 1);
+
+              //destroy plane
               if (planes[i].hp < 1) {
                 planes[i].hitAnimation(
                   planes[i].unit.x,
                   planes[i].unit.y,
                   true
                 );
+                explosion.play();
                 planes[i].unit.destroy();
                 delete planes[i];
                 planes.splice(i, 1);

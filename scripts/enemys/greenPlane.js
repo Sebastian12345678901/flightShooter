@@ -1,10 +1,10 @@
-/* extends Phaser.Physics.Arcade.Sprite */
 class GreenPlane {
   constructor(image) {
     this.x = this.randomX();
     this.y = this.randomY();
     this.image = image;
     this.hp = 10;
+
     this.unit = game.scene.scenes[0].physics.add.sprite(
       this.x,
       this.y,

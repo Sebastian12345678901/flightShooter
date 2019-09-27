@@ -21,7 +21,7 @@ let scoreBoard = {
 
   gameOver: () => {
     gameOver = game.scene.scenes[0].add.text(
-      screenWidth / 2 - 300,
+      screenWidth / 2 - 500,
       370,
       "GAME OVER: ",
       {
@@ -32,7 +32,7 @@ let scoreBoard = {
     gameOver.depth = 20;
 
     finalScore = game.scene.scenes[0].add.text(
-      screenWidth / 2 - 300,
+      screenWidth / 2 - 500,
       470,
       "final score: " + scoreBoard.yourScore,
       {

@@ -4,7 +4,7 @@ class Player extends Entity {
     this.body.body.collideWorldBounds = true;
 
     this.body.body.setCircle(20, 80, -80);
-    this.hp = 20;
+    this.hp = 10;
     this.destroyed = false;
   }
 
@@ -23,9 +23,10 @@ class Player extends Entity {
               false
             );
 
+            redScreen.play("red");
+
             hitpoints.destroy();
             scoreBoard.displayHp();
-
             enemyProjectiles[j].destroy();
             delete enemyProjectiles[i];
             enemyProjectiles.splice(j, 1);
