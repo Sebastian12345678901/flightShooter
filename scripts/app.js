@@ -41,44 +41,40 @@ let enemyShoot;
 let redScreen;
 //laddar in alla assests, som bilder ljud osv...
 function preload() {
-  this.load.audio("enemy-shoot", "/sounds/enemyShoot.mp3");
-  this.load.audio("game-over", "/sounds/gameOver.mp3");
-  this.load.audio("explosion", "/sounds/explosion.mp3");
-  this.load.audio("bullet-impact", "/sounds/bullet-impact.mp3");
-  this.load.audio("music", "/sounds/music.mp3");
-  this.load.audio("gun", "/sounds/machineGun.mp3");
-  this.load.image("ground-grass", "/images/map/ground-grass.svg");
-  this.load.image("tree", "/images/map/tree.svg");
-  this.load.image("hill", "/images/map/kullar.svg");
-  this.load.image("stone", "/images/map/stones.svg");
-  this.load.image("house", "/images/map/hus.svg");
-  this.load.image("player", "/images/player/player.svg");
-  this.load.image("player-projectile", "/images/player/playerProjectile.svg");
-  this.load.image("enemy", "/images/enemys/enemy.svg");
-  this.load.image("enemy-projectile", "/images/enemys/enemyProjectile.svg");
+  this.load.audio("enemy-shoot", "sounds/enemyShoot.mp3");
+  this.load.audio("game-over", "sounds/gameOver.mp3");
+  this.load.audio("explosion", "sounds/explosion.mp3");
+  this.load.audio("bullet-impact", "sounds/bullet-impact.mp3");
+  this.load.audio("music", "sounds/music.mp3");
+  this.load.audio("gun", "sounds/machineGun.mp3");
+  this.load.image("ground-grass", "images/map/ground-grass.svg");
+  this.load.image("tree", "images/map/tree.svg");
+  this.load.image("hill", "images/map/kullar.svg");
+  this.load.image("stone", "images/map/stones.svg");
+  this.load.image("house", "images/map/hus.svg");
+  this.load.image("player", "images/player/player.svg");
+  this.load.image("player-projectile", "images/player/playerProjectile.svg");
+  this.load.image("enemy", "images/enemys/enemy.svg");
+  this.load.image("enemy-projectile", "images/enemys/enemyProjectile.svg");
 
-  this.load.spritesheet("red-screen", "/images/player/redScreenAnimation.png", {
+  this.load.spritesheet("red-screen", "images/player/redScreenAnimation.png", {
     frameWidth: 100,
     frameHeight: 100
   });
 
-  this.load.spritesheet("seppelinare", "/images/enemys/seppelinare.png", {
+  this.load.spritesheet("seppelinare", "images/enemys/seppelinare.png", {
     frameWidth: 177,
     frameHeight: 223
   });
 
-  this.load.spritesheet(
-    "enemy-animation",
-    "/images/enemys/enemyAnimation.png",
-    {
-      frameWidth: 916,
-      frameHeight: 542
-    }
-  );
+  this.load.spritesheet("enemy-animation", "images/enemys/enemyAnimation.png", {
+    frameWidth: 916,
+    frameHeight: 542
+  });
 
   this.load.spritesheet(
     "playerAnimation",
-    "/images/player/playerAnimation.png",
+    "images/player/playerAnimation.png",
     {
       frameWidth: 248,
       frameHeight: 103
